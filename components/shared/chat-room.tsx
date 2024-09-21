@@ -8,7 +8,7 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import { Button } from "../ui/button";
-import { MessageCircle } from "lucide-react";
+import { LoaderIcon, MessageCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Separator } from "../ui/separator";
@@ -17,14 +17,16 @@ import { useForm } from "react-hook-form";
 import { messageSchema, MessageSchema } from "@/schema/messageSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Textarea } from "../ui/textarea";
-import { PaperPlaneIcon } from "@radix-ui/react-icons";
+import { CircleIcon, PaperPlaneIcon } from "@radix-ui/react-icons";
 import { useAtom } from "jotai";
 import { messageAtom } from "@/atoms";
 import { cn } from "@/lib/utils";
+import axios from "axios";
 
 const ChatRoom = () => {
   const [mounted, setMounted] = useState(false);
   const [messages, setMessages] = useAtom(messageAtom);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -37,7 +39,31 @@ const ChatRoom = () => {
   });
 
   async function handleSubmit(values: MessageSchema) {
-    console.log(values.message);
+    setLoading(true);
+
+    const userMessage:Message = {
+      message: values.message,
+      type:"HUMAN"
+    }
+
+    setMessages((prev)=> [...prev, userMessage])
+    try {
+      const data = await axios.post(
+        "http://localhost:8080/api/v1/model",
+        values
+      );
+     const aiMessage:Message = {
+      message:data.data.Value,
+      type:"AI",
+     }
+
+     setMessages((prev)=>[...prev, aiMessage])
+    } catch (error) {
+      alert(error);
+    } finally {
+      setLoading(false);
+    }
+    form.reset();
   }
 
   if (!mounted) {
@@ -49,7 +75,7 @@ const ChatRoom = () => {
       <DialogTrigger>
         <Button
           variant="outline"
-          className="p-6 border-x-2 border-x-pink-700 rounded-full gap-x-2"
+          className="p-6 border-x-2 border-x-primary bg-gradient-to-r from-rose-700 via-pink-950 to-black rounded-full gap-x-2"
         >
           <MessageCircle className="h-5 w-5" />
           <p>Wanna know more?</p>
@@ -68,6 +94,8 @@ const ChatRoom = () => {
             >
               Gemini AI.
             </Link>
+            <br />
+            <p className="text-sm font-bold opacity-45 mt-1">Please be patient. Our AI takes some time.</p>
           </DialogDescription>
         </DialogHeader>
         <Separator />
@@ -94,6 +122,14 @@ const ChatRoom = () => {
                   </div>
                 </div>
               ))}
+              {loading && (
+                <div className="flex my-2 justify-start p-2 bg-rose-800 w-3/4 rounded-xl rounded-bl-none">
+                  <div className="flex items-center space-x-3">
+                    <CircleIcon className="animate-pulse h-8 w-8" />
+                    <p>Thinking</p>
+                  </div>
+                </div>
+              )}
             </div>
             <div className="h-[15%]">
               <Form {...form}>

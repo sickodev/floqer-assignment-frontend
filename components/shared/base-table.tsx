@@ -1,17 +1,53 @@
-"use client"
-import React, { forwardRef, useRef } from 'react'
-import { Table, TableCaption } from '../ui/table'
+"use client";
+import React, { useEffect, useState } from "react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
+import { H1 } from "../common/H1";
+import axios, { AxiosResponse } from "axios";
+import DataTable from "./main/table/data-table";
+import DataChart from "./main/chart/data-chart";
 
-const BaseTable = ({tableRef}:{tableRef:React.RefObject<HTMLDivElement>})=> {
+
+
+const BaseTable = ({
+  tableRef,
+}: {
+  tableRef: React.RefObject<HTMLDivElement>;
+}) => {
+  const [data, setData] = useState<TableData[]>([]);
+
+  useEffect(() => {
+    async function getData() {
+      try {
+        const res: AxiosResponse<TableData[]> = await axios.get(
+          "http://localhost:8080/api/v1/store"
+        );
+        setData(res.data); // Ensure the response matches TableData[]
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+
+    getData();
+  }, []);
+
   return (
-    <section ref={tableRef} id='#base-table'className='h-full w-full'>
-        <Table>
-            <TableCaption>
-                A list of your recent invoices.
-            </TableCaption>
-        </Table>
+    <section
+      ref={tableRef}
+      id="base-table" // Correct the ID
+      className="h-full w-full space-y-6 p-2"
+    >
+      <H1>All ML Engineer Salaries from 2020 to 2024.</H1>
+      <DataTable data={data}/>
+      <DataChart data={data}/>
     </section>
-  )
-}
+  );
+};
 
-export default BaseTable
+export default BaseTable;
