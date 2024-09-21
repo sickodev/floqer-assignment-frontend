@@ -24,7 +24,7 @@ const DataChart = ({ data }: { data: TableData[] }) => {
   //   });
   // }
   console.log(data);
-  return <h3>Couldn't build a chart. The data manipulation was tough.</h3>;
+  return <h3>Couldn&apos;t build a chart. The data manipulation was tough.</h3>;
 };
 
 export default DataChart;

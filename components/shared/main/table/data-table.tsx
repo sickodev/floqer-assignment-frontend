@@ -41,8 +41,8 @@ const DataTable = ({ data }: { data: TableData[] }) => {
     },
   });
 
-  const totalPageCount = table.getPageCount();
-  const currentPage = table.getState().pagination.pageIndex + 1;
+  // const totalPageCount = table.getPageCount();
+  // const currentPage = table.getState().pagination.pageIndex + 1;
 
   return (
     <div>
