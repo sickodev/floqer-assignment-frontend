@@ -26,7 +26,7 @@ const BaseTable = ({
     async function getData() {
       try {
         const res: AxiosResponse<TableData[]> = await axios.get(
-          "http://localhost:8080/api/v1/store"
+          "https://floqer-backend-ubn6.onrender.com/api/v1/store"
         );
         setData(res.data); // Ensure the response matches TableData[]
       } catch (error) {

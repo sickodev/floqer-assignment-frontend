@@ -41,23 +41,23 @@ const ChatRoom = () => {
   async function handleSubmit(values: MessageSchema) {
     setLoading(true);
 
-    const userMessage:Message = {
+    const userMessage: Message = {
       message: values.message,
-      type:"HUMAN"
-    }
+      type: "HUMAN",
+    };
 
-    setMessages((prev)=> [...prev, userMessage])
+    setMessages((prev) => [...prev, userMessage]);
     try {
       const data = await axios.post(
-        "http://localhost:8080/api/v1/model",
+        "https://floqer-backend-ubn6.onrender.com/api/v1/model",
         values
       );
-     const aiMessage:Message = {
-      message:data.data.Value,
-      type:"AI",
-     }
+      const aiMessage: Message = {
+        message: data.data.Value,
+        type: "AI",
+      };
 
-     setMessages((prev)=>[...prev, aiMessage])
+      setMessages((prev) => [...prev, aiMessage]);
     } catch (error) {
       alert(error);
     } finally {
@@ -65,6 +65,13 @@ const ChatRoom = () => {
     }
     form.reset();
   }
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault(); // Prevent new line
+      form.handleSubmit(handleSubmit)(); // Trigger form submission
+    }
+  };
 
   if (!mounted) {
     return null;
@@ -95,7 +102,9 @@ const ChatRoom = () => {
               Gemini AI.
             </Link>
             <br />
-            <p className="text-sm font-bold opacity-45 mt-1">Please be patient. Our AI takes some time.</p>
+            <p className="text-sm font-bold opacity-45 mt-1">
+              Please be patient. Our AI takes some time.
+            </p>
           </DialogDescription>
         </DialogHeader>
         <Separator />
@@ -147,6 +156,7 @@ const ChatRoom = () => {
                             <Textarea
                               className="w-full text-lg rounded-none"
                               placeholder="Why are the salaries so high?"
+                              onKeyDown={handleKeyDown}
                               {...field}
                             />
                           </FormControl>
