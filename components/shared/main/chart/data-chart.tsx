@@ -1,11 +1,3 @@
-import { ChartContainer } from "@/components/ui/chart";
-import React from "react";
-import { chartConfig } from "./chart-config";
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-} from "recharts";
 
 const DataChart = ({ data }: { data: TableData[] }) => {
   const years = Array.from(new Set(data.map((item) => item.work_year)));
@@ -33,17 +25,9 @@ const DataChart = ({ data }: { data: TableData[] }) => {
     });
   }
   return (
-    <ChartContainer config={chartConfig} className="max-h-full w-full">
-      <BarChart accessibilityLayer data={chartData}>
-        <CartesianGrid />
-        <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
-        <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
-      </BarChart>
-
-      <h3>
-        Couldn't build a chart. The data manipulation was tough :(
+          <h3>
+        Couldn't build a chart. The data manipulation was tough.
       </h3>
-    </ChartContainer>
   );
 };
 

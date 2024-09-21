@@ -8,7 +8,7 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import { Button } from "../ui/button";
-import { LoaderIcon, MessageCircle } from "lucide-react";
+import { MessageCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Separator } from "../ui/separator";
@@ -111,9 +111,9 @@ const ChatRoom = () => {
         <div className="h-[78vh]">
           <div className="h-full">
             <div className="h-[85%] bg-neutral-700/20 overflow-y-scroll p-2">
-              {messages.map((message) => (
+              {messages.map((message,indx) => (
                 <div
-                  key={message.id}
+                  key={indx}
                   className={cn(
                     "flex my-2", // Flex container for alignment
                     message.type === "AI" ? "justify-start" : "justify-end"

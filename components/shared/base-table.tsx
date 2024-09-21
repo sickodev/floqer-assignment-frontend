@@ -1,13 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../ui/table";
 import { H1 } from "../common/H1";
 import axios, { AxiosResponse } from "axios";
 import DataTable from "./main/table/data-table";
