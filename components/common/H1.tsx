@@ -18,3 +18,5 @@ export const H1 = forwardRef<
     </h1>
   );
 });
+
+H1.displayName = "H1";
